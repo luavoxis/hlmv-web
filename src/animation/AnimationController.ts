@@ -92,11 +92,9 @@ export class AnimationController {
       this.frame = this.frame - Math.floor(this.frame / numFrames) * numFrames
       if (this.frame < 0) this.frame += numFrames
     } else {
-      if (this.frame >= numFrames - 1) {
-        this.frame   = numFrames - 1.001
-        this.playing = false
-      }
-      if (this.frame < 0) this.frame = 0
+      // Always loop regardless of STUDIO_LOOPING flag
+      this.frame = this.frame - Math.floor(this.frame / numFrames) * numFrames
+      if (this.frame < 0) this.frame += numFrames
     }
 
     const fi   = Math.floor(this.frame)
