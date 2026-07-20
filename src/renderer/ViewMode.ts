@@ -46,7 +46,7 @@ export class ViewModeController {
   private applyFP(cam: PerspectiveCamera): void {
     cam.position.copy(this.fpCamPos)
     cam.lookAt(this.fpLookAt)
-    cam.fov = 12
+    cam.fov = 18
     cam.updateProjectionMatrix()
   }
 
