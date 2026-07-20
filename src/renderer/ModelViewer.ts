@@ -30,7 +30,7 @@ export class ModelViewer {
     container.appendChild(this.renderer.domElement)
 
     this.scene  = new Scene()
-    this.camera = new PerspectiveCamera(70, 1, 0.1, 5000)
+    this.camera = new PerspectiveCamera(50, 1, 0.1, 5000)
 
     this.scene.add(new AmbientLight(0xffffff, 1.02))
     this.scene.add(new HemisphereLight(0xffffff, 0x475569, 0.72))
