@@ -4,7 +4,7 @@
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Color,
   AmbientLight, DirectionalLight, HemisphereLight,
-  Box3, Sphere, Object3D, Vector3, AxesHelper,
+  Box3, Sphere, Object3D, Vector3,
 } from 'three'
 import { ViewModeController } from './ViewMode'
 
@@ -46,9 +46,6 @@ export class ModelViewer {
     const rim = new DirectionalLight(0x4477cc, 0.6)
     rim.position.set(0, -60, -100)
     this.scene.add(rim)
-
-    const axes = new AxesHelper(50)
-    this.scene.add(axes)
 
     this.viewMode = new ViewModeController()
 
@@ -96,9 +93,11 @@ export class ModelViewer {
     this.viewMode.orbitPhi    = Math.PI / 2   // eye level
 
     // ── FPS / ViewModel POV ───────────────────────────────────────────────
-    // Barrel = +X (orange axis). Camera sits behind stock (-X),
-    // looks straight along +X (barrel direction).
-    this.viewMode.fpCamPos.set(c.x - r * 0.6, c.y + r * 0.3, c.z + r * 0.2)
+    // Barrel = +X. Camera sits behind (-X), above (+Y), and right (+Z) of
+    // the weapon, looking straight along +X. This places the weapon in the
+    // lower-left of the viewport with the barrel extending upper-right —
+    // matching the classic CS 1.6 first-person viewmodel.
+    this.viewMode.fpCamPos.set(c.x - r * 0.6, c.y + r * 0.45, c.z + r * 0.35)
     this.viewMode.fpLookAt.set(c.x + r * 10, c.y + r * 0.1, c.z)
     this.viewMode.fpYaw   = 0
     this.viewMode.fpPitch = 0
