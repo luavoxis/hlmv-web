@@ -127,40 +127,30 @@
 
     /* ─── Sidebar header ──────────────────────────────────────────── */
     .sidebar-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 12px 10px 16px;
-      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: flex-end;
+      padding: 6px 8px 0 0;
       flex-shrink: 0;
-    }
-    .sidebar-header-title {
-      font-size: 11px; font-weight: 700; letter-spacing: 1px;
-      text-transform: uppercase; color: var(--text2);
     }
 
     .sb-close {
-      width: 28px; height: 28px; border: none; border-radius: 6px;
+      width: 24px; height: 24px; border: none; border-radius: 4px;
       background: transparent; color: var(--text3); cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       transition: background .15s, color .15s;
-      flex-shrink: 0;
     }
     .sb-close:hover { background: var(--surface2); color: var(--text); }
-    .sb-close svg { width: 16px; height: 16px; }
+    .sb-close svg { width: 14px; height: 14px; }
 
     .drawer-handle { display: none; }
 
     /* ─── Sidebar sections ──────────────────────────────────────────── */
-    .sb-section {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-    }
-    .sb-section:last-child { border-bottom: none; }
+    .sb-section { padding: 8px 16px 12px; }
 
     .sb-title {
       font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
       text-transform: uppercase; color: var(--text3);
       display: flex; align-items: center; gap: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .sb-title::before {
       content: ''; display: inline-block;
@@ -214,38 +204,35 @@
     /* ─── Info panel ────────────────────────────────────────────────── */
     .info-name {
       font-size: 13px; font-weight: 600; color: var(--text);
-      padding-bottom: 10px; margin-bottom: 10px;
-      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px; margin-bottom: 6px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .info-grid {
-      display: grid; grid-template-columns: 1fr auto; gap: 3px 12px;
+      display: grid; grid-template-columns: 1fr auto; gap: 1px 10px;
     }
     .info-label {
-      color: var(--text3); font-size: 11px; line-height: 2;
+      color: var(--text3); font-size: 11px; line-height: 1.9;
     }
     .info-val {
       color: var(--text);  font-size: 11px; font-weight: 500;
-      font-variant-numeric: tabular-nums; text-align: right; line-height: 2;
+      font-variant-numeric: tabular-nums; text-align: right; line-height: 1.9;
     }
-    .info-seq {
-      margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
-    }
+    .info-seq { margin-top: 8px; padding-top: 6px; }
     .info-seq-name {
       font-size: 12px; font-weight: 600; color: var(--accent);
-      margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
     /* ─── Animation bar ─────────────────────────────────────────────── */
     .anim-select {
-      width: 100%; margin-bottom: 12px;
+      width: 100%; margin-bottom: 10px;
       appearance: none; -webkit-appearance: none;
       background: var(--surface2)
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23909090' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")
         no-repeat right 8px center;
       background-size: 10px;
       color: var(--text); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 8px 28px 8px 12px;
+      border-radius: var(--r); padding: 7px 28px 7px 10px;
       font: 500 12px/1 var(--font); cursor: pointer;
       transition: border-color .15s;
     }
@@ -253,29 +240,20 @@
     .anim-select:focus  { border-color: var(--accent); outline: none; }
 
     .anim-row {
-      display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 6px; margin-bottom: 8px;
     }
     .anim-row:last-child { margin-bottom: 0; }
 
     .anim-play {
-      width: 36px; height: 36px; flex-shrink: 0; border: none; border-radius: 50%;
+      width: 28px; height: 28px; flex-shrink: 0; border: none; border-radius: 50%;
       background: var(--accent); color: #fff; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: background .15s, transform .1s, box-shadow .15s;
-      box-shadow: 0 2px 10px rgba(59,130,246,.35);
+      transition: opacity .15s, transform .1s;
+      opacity: .85;
     }
-    .anim-play svg { width: 14px; height: 14px; }
-    .anim-play:hover  { background: var(--accent2); box-shadow: 0 3px 14px rgba(59,130,246,.5); }
-    .anim-play:active { transform: scale(.92); }
-
-    .anim-restart {
-      width: 28px; height: 28px; flex-shrink: 0; border: none; border-radius: 6px;
-      background: transparent; color: var(--text3); cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .15s, color .15s;
-    }
-    .anim-restart svg { width: 14px; height: 14px; }
-    .anim-restart:hover { background: var(--surface2); color: var(--text); }
+    .anim-play svg { width: 12px; height: 12px; }
+    .anim-play:hover  { opacity: 1; }
+    .anim-play:active { transform: scale(.9); }
 
     .anim-framelabel {
       font-size: 11px; font-weight: 500;
@@ -284,60 +262,43 @@
     }
     .anim-time {
       font-size: 10px; font-weight: 500; color: var(--text3);
-      font-variant-numeric: tabular-nums; min-width: 64px; text-align: right;
+      font-variant-numeric: tabular-nums; min-width: 56px; text-align: right;
     }
 
-    .anim-label { font-size: 11px; color: var(--text2); flex-shrink: 0; min-width: 36px; }
     .anim-speedlabel {
-      font-size: 11px; color: var(--text2); min-width: 36px; text-align: right;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .anim-speed-preset {
-      padding: 4px 8px; border: 1px solid var(--border); border-radius: 5px;
-      background: transparent; color: var(--text3); cursor: pointer;
-      font: 600 10px/1 var(--font); transition: all .12s;
-    }
-    .anim-speed-preset:hover { border-color: var(--border2); color: var(--text); }
-    .anim-speed-preset.active {
-      background: var(--accent-bg); border-color: var(--accent); color: var(--accent);
+      font-size: 10px; color: var(--text3); min-width: 28px; text-align: right;
+      font-variant-numeric: tabular-nums; flex-shrink: 0;
     }
 
     .anim-slider {
-      flex: 1; height: 4px; cursor: pointer;
+      flex: 1; height: 2px; cursor: pointer;
       appearance: none; -webkit-appearance: none;
-      background: rgba(255,255,255,.06); border-radius: 3px; outline: none;
+      background: rgba(255,255,255,.08); border-radius: 1px; outline: none;
       margin-bottom: 0;
-      --pct: 0;
     }
-    .anim-slider:hover { background: rgba(255,255,255,.1); }
-    .anim-slider::-webkit-slider-runnable-track {
-      height: 4px; border-radius: 3px;
-      background: linear-gradient(to right, var(--accent) 0%, var(--accent) calc(var(--pct) * 1%), rgba(255,255,255,.06) calc(var(--pct) * 1%));
-    }
+    .anim-slider:hover { background: rgba(255,255,255,.14); }
     .anim-slider::-webkit-slider-thumb {
       appearance: none; -webkit-appearance: none;
-      width: 16px; height: 16px; border-radius: 50%;
-      background: var(--accent); border: 2px solid var(--surface-solid);
-      cursor: pointer; transition: transform .12s, box-shadow .12s;
-      margin-top: -6px;
-      box-shadow: 0 0 0 3px transparent;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--text); cursor: pointer;
+      transition: transform .1s, background .15s;
+      margin-top: -5px;
     }
     .anim-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.15);
-      box-shadow: 0 0 0 4px var(--accent-bg);
+      transform: scale(1.2);
+      background: var(--accent);
     }
     .anim-slider::-moz-range-track {
-      height: 4px; border-radius: 3px;
-      background: rgba(255,255,255,.06);
+      height: 2px; border-radius: 1px;
+      background: rgba(255,255,255,.08);
     }
     .anim-slider::-moz-range-thumb {
-      width: 16px; height: 16px; border-radius: 50%;
-      background: var(--accent); border: 2px solid var(--surface-solid); cursor: pointer;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--text); cursor: pointer; border: none;
     }
     .anim-slider::-moz-range-progress {
-      height: 4px; border-radius: 3px;
-      background: var(--accent);
+      height: 2px; border-radius: 1px;
+      background: var(--text3);
     }
 
     /* ─── FAB (mobile sidebar toggle) ──────────────────────────────── */
@@ -368,16 +329,14 @@
         transition: transform .32s cubic-bezier(.22,1,.36,1);
       }
       .sidebar:not(.open) {
-        transform: translateY(calc(100% - 40px));
+        transform: translateY(calc(100% - 34px));
       }
 
       .sidebar-toggle { display: none; }
 
       .sidebar-header {
-        padding: 6px 12px 6px 16px;
-        border-bottom: none;
+        padding: 4px 6px 0 0;
       }
-      .sidebar-header-title { display: none; }
 
       .drawer-handle {
         display: flex; align-items: center; justify-content: center;
