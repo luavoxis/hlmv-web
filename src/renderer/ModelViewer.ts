@@ -2,7 +2,7 @@
  * ModelViewer — owns the Three.js WebGL scene, camera, lights, and render loop.
  */
 import {
-  WebGLRenderer, Scene, PerspectiveCamera, Color,
+  WebGLRenderer, Scene, PerspectiveCamera,
   AmbientLight, DirectionalLight, HemisphereLight,
   Box3, Sphere, Object3D, Vector3,
 } from 'three'
@@ -22,31 +22,26 @@ export class ModelViewer {
   private keys  = new Set<string>()
 
   constructor(container: HTMLElement) {
-    this.renderer = new WebGLRenderer({ antialias: true, alpha: false })
+    this.renderer = new WebGLRenderer({ antialias: true, alpha: true })
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    this.renderer.setClearColor(new Color(0x0e0e0e))
-    this.renderer.toneMapping = 4          // ACESFilmicToneMapping
-    this.renderer.toneMappingExposure = 1.2
+    this.renderer.setClearColor(0x000000, 0)
+    this.renderer.outputColorSpace = 'srgb' as any
     this.renderer.domElement.style.display = 'none'
     container.appendChild(this.renderer.domElement)
 
     this.scene  = new Scene()
     this.camera = new PerspectiveCamera(45, 1, 0.1, 5000)
 
-    this.scene.add(new HemisphereLight(0x3b6cc9, 0x332211, 0.6))
-    this.scene.add(new AmbientLight(0x202030, 0.4))
+    this.scene.add(new AmbientLight(0xffffff, 1.02))
+    this.scene.add(new HemisphereLight(0xffffff, 0x475569, 0.72))
 
-    const key = new DirectionalLight(0xffffff, 2.0)
-    key.position.set(80, 120, 60)
+    const key = new DirectionalLight(0xffffff, 1.48)
+    key.position.set(-120, 220, 160)
     this.scene.add(key)
 
-    const fill = new DirectionalLight(0x8899ff, 0.5)
-    fill.position.set(-60, 40, -80)
+    const fill = new DirectionalLight(0xd8e8ff, 0.56)
+    fill.position.set(120, -80, -140)
     this.scene.add(fill)
-
-    const rim = new DirectionalLight(0x4477cc, 0.6)
-    rim.position.set(0, -60, -100)
-    this.scene.add(rim)
 
     this.viewMode = new ViewModeController()
 
