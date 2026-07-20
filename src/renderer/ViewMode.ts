@@ -39,7 +39,7 @@ export class ViewModeController {
     const z = r * Math.sin(this.orbitPhi) * Math.cos(this.orbitTheta)
     cam.position.set(x + this.orbitTarget.x, y + this.orbitTarget.y, z + this.orbitTarget.z)
     cam.lookAt(this.orbitTarget)
-    cam.fov = 45
+    cam.fov = 70
     cam.updateProjectionMatrix()
   }
 
@@ -53,7 +53,7 @@ export class ViewModeController {
   private applyFreeLook(cam: PerspectiveCamera): void {
     cam.position.copy(this.flPos)
     cam.rotation.copy(this.flEuler)
-    cam.fov = 45
+    cam.fov = 70
     cam.updateProjectionMatrix()
   }
 
