@@ -12,8 +12,11 @@ export class ViewModeController {
   orbitTarget = new Vector3(0, 0, 0)
 
   // FirstPerson (viewmodel POV)
-  fpCamPos = new Vector3(0, 0, 100)
-  fpLookAt = new Vector3(0, 0, 0)
+  fpCamPos  = new Vector3(0, 0, 100)
+  fpLookAt  = new Vector3(0, 0, 0)
+  fpYaw     = 0
+  fpPitch   = 0
+  private _fpTarget = new Vector3()
 
   // FreeLook
   flPos   = new Vector3(0, 20, 80)
@@ -42,7 +45,13 @@ export class ViewModeController {
 
   private applyFP(cam: PerspectiveCamera): void {
     cam.position.copy(this.fpCamPos)
-    cam.lookAt(this.fpLookAt)
+    const d = 100
+    this._fpTarget.set(
+      this.fpCamPos.x - Math.sin(this.fpYaw) * Math.cos(this.fpPitch) * d,
+      this.fpCamPos.y + Math.sin(this.fpPitch) * d,
+      this.fpCamPos.z - Math.cos(this.fpYaw) * Math.cos(this.fpPitch) * d,
+    )
+    cam.lookAt(this._fpTarget)
     cam.fov = 90
     cam.updateProjectionMatrix()
   }
@@ -57,7 +66,10 @@ export class ViewModeController {
   onMouseDrag(dx: number, dy: number): void {
     if (this.mode === 'orbit') {
       this.orbitTheta -= dx * 0.01
-      this.orbitPhi    = Math.max(0.05, Math.min(Math.PI - 0.05, this.orbitPhi + dy * 0.01))
+      this.orbitPhi    = Math.max(0.05, Math.min(Math.PI - 0.05, this.orbitPhi - dy * 0.01))
+    } else if (this.mode === 'firstperson') {
+      this.fpYaw   -= dx * 0.005
+      this.fpPitch  = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.fpPitch + dy * 0.005))
     } else if (this.mode === 'freelook') {
       this.flEuler.y -= dx * 0.005
       this.flEuler.x  = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.flEuler.x + dy * 0.005))

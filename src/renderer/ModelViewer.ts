@@ -97,6 +97,8 @@ export class ModelViewer {
     // So camera goes to c + (0, slight_up, +radius) and looks at c.
     this.viewMode.fpCamPos.set(c.x, c.y + r * 0.05, c.z + r * 1.6)
     this.viewMode.fpLookAt.copy(c)
+    this.viewMode.fpYaw   = 0
+    this.viewMode.fpPitch = 0
 
     // ── FreeLook ──────────────────────────────────────────────────────────
     this.viewMode.flPos.set(c.x, c.y + r * 0.3, c.z + r * 2.5)
