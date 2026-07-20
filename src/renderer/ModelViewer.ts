@@ -82,6 +82,8 @@ export class ModelViewer {
     const r = sphere.radius
 
     console.log(`[fitCamera] bbox centre=(${c.x.toFixed(1)}, ${c.y.toFixed(1)}, ${c.z.toFixed(1)}) r=${r.toFixed(1)}`)
+    console.log(`[fitCamera] bbox min=(${box.min.x.toFixed(1)}, ${box.min.y.toFixed(1)}, ${box.min.z.toFixed(1)}) max=(${box.max.x.toFixed(1)}, ${box.max.y.toFixed(1)}, ${box.max.z.toFixed(1)})`)
+    console.log(`[fitCamera] fpCamPos=(${this.viewMode.fpCamPos.x.toFixed(1)}, ${this.viewMode.fpCamPos.y.toFixed(1)}, ${this.viewMode.fpCamPos.z.toFixed(1)}) fpLookAt=(${this.viewMode.fpLookAt.x.toFixed(1)}, ${this.viewMode.fpLookAt.y.toFixed(1)}, ${this.viewMode.fpLookAt.z.toFixed(1)})`)
 
     // ── Orbit ─────────────────────────────────────────────────────────────
     // Camera orbits around the bounding sphere centre.
@@ -95,10 +97,10 @@ export class ModelViewer {
 
     // ── FPS / ViewModel POV ───────────────────────────────────────────────
     // GoldSrc: barrel = +X, up = +Y (after -90° X rotation).
-    // Camera sits behind the stock, looking along +X (barrel direction).
-    // Offset in Z gives the slight right-side angle of a CS 1.6 viewmodel.
-    this.viewMode.fpCamPos.set(c.x - r * 0.4, c.y + r * 0.25, c.z + r * 0.3)
-    this.viewMode.fpLookAt.set(c.x + r * 2.0, c.y - r * 0.05, c.z)
+    // Camera looks along -Z (forward), barrel extends along +X (screen right).
+    // Weapon sits in the lower-right of the viewport — classic CS 1.6 viewmodel.
+    this.viewMode.fpCamPos.set(c.x - r * 0.3, c.y + r * 0.4, c.z + r * 0.8)
+    this.viewMode.fpLookAt.set(c.x, c.y - r * 0.1, c.z - r * 1.0)
     this.viewMode.fpYaw   = 0
     this.viewMode.fpPitch = 0
 
