@@ -67,9 +67,6 @@ export class ViewModeController {
     if (this.mode === 'orbit') {
       this.orbitTheta -= dx * 0.01
       this.orbitPhi    = Math.max(0.05, Math.min(Math.PI - 0.05, this.orbitPhi - dy * 0.01))
-    } else if (this.mode === 'firstperson') {
-      this.fpYaw   -= dx * 0.005
-      this.fpPitch  = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.fpPitch + dy * 0.005))
     } else if (this.mode === 'freelook') {
       this.flEuler.y -= dx * 0.005
       this.flEuler.x  = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.flEuler.x + dy * 0.005))

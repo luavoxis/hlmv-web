@@ -92,10 +92,9 @@ export class ModelViewer {
 
     // ── FPS / ViewModel POV ───────────────────────────────────────────────
     // After -90° X rotation, model front faces +Z.
-    // Camera sits close to the model, slightly above, looking back at it —
-    // simulating the classic CS 1.6 first-person weapon hold.
-    // Eye height and distance are model-relative so every weapon scales correctly.
-    this.viewMode.fpCamPos.set(c.x, c.y + r * 0.4, c.z + r * 0.5)
+    // Camera sits to the left, lower, and in front — simulating the classic
+    // CS 1.6 first-person weapon hold where the barrel points forward.
+    this.viewMode.fpCamPos.set(c.x - r * 0.3, c.y + r * 0.2, c.z + r * 0.5)
     this.viewMode.fpLookAt.copy(c)
     this.viewMode.fpYaw   = 0
     this.viewMode.fpPitch = 0
