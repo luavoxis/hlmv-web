@@ -30,12 +30,19 @@ let emptyState:   HTMLElement | null = null
 
 // ── UI wiring ─────────────────────────────────────────────────────────────
 
-// Sidebar sections
-const infoContent = shell.addSidebarSection('Model')
-const infoPanel   = new InfoPanel(infoContent)
+// Sidebar sections (hidden until model loads)
+const infoSection  = shell.addSidebarSection('Model')
+const infoContent  = infoSection.content
+const infoPanel    = new InfoPanel(infoContent)
+const infoWrapper  = infoSection.wrapper
 
-const animContent = shell.addSidebarSection('Animation')
-const animBar     = new AnimationBar(animContent, animCtrl)
+const animSection  = shell.addSidebarSection('Animation')
+const animContent  = animSection.content
+const animBar      = new AnimationBar(animContent, animCtrl)
+const animWrapper  = animSection.wrapper
+
+infoWrapper.style.display = 'none'
+animWrapper.style.display = 'none'
 
 // Toolbar — Open button
 const fileInput = new FileLoader((buf, name) => {
@@ -93,6 +100,12 @@ function loadModel(mdl: ParsedMDL): void {
   animCtrl.setModel(results, mdl.sequences)
   animBar.populate(mdl.sequences)
 
+  // Register callbacks BEFORE playing
+  animCtrl.setOnSeqChange(seq => {
+    infoPanel.showSeq(seq)
+    if (seq) animBar.selectSeq(animCtrl.getCurrentSeqIndex())
+  })
+
   if (mdl.sequences.length > 0) {
     animCtrl.playSequence(0)
     animBar.selectSeq(0)
@@ -103,10 +116,9 @@ function loadModel(mdl: ParsedMDL): void {
 
   infoPanel.showModel(mdl)
 
-  animCtrl.setOnSeqChange(seq => {
-    infoPanel.showSeq(seq)
-    if (seq) animBar.selectSeq(animCtrl.getCurrentSeqIndex())
-  })
+  // Show sidebar sections
+  infoWrapper.style.display = ''
+  animWrapper.style.display = ''
 }
 
 // ── Main loop ─────────────────────────────────────────────────────────────

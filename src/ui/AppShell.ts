@@ -88,7 +88,7 @@ export class AppShell {
     this.toolbarRight.appendChild(el)
   }
 
-  addSidebarSection(title: string): HTMLElement {
+  addSidebarSection(title: string): { wrapper: HTMLElement; content: HTMLElement } {
     const sec = this.el('div', 'sb-section')
     const hdr = this.el('div', 'sb-title')
     hdr.textContent = title
@@ -96,7 +96,7 @@ export class AppShell {
     const content = this.el('div', 'sb-content')
     sec.appendChild(content)
     this.sidebar.appendChild(sec)
-    return content
+    return { wrapper: sec, content }
   }
 
   showEmptyState(): HTMLElement {
