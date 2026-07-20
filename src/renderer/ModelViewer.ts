@@ -96,11 +96,10 @@ export class ModelViewer {
     this.viewMode.orbitPhi    = Math.PI / 2   // eye level
 
     // ── FPS / ViewModel POV ───────────────────────────────────────────────
-    // GoldSrc: barrel = +X, up = +Y (after -90° X rotation).
-    // Camera looks along -Z (forward), barrel extends along +X (screen right).
-    // Weapon sits in the lower-right of the viewport — classic CS 1.6 viewmodel.
-    this.viewMode.fpCamPos.set(c.x - r * 0.3, c.y + r * 0.4, c.z + r * 0.8)
-    this.viewMode.fpLookAt.set(c.x, c.y - r * 0.1, c.z - r * 1.0)
+    // Barrel = +X (orange axis). Camera sits behind stock (-X),
+    // looks straight along +X (barrel direction).
+    this.viewMode.fpCamPos.set(c.x - r * 0.6, c.y + r * 0.3, c.z + r * 0.2)
+    this.viewMode.fpLookAt.set(c.x + r * 10, c.y + r * 0.1, c.z)
     this.viewMode.fpYaw   = 0
     this.viewMode.fpPitch = 0
 
