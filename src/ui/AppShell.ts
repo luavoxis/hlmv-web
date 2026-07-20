@@ -30,10 +30,6 @@ export class AppShell {
     // ── Topbar ──────────────────────────────────────────────────────
     this.header = this.el('header', 'topbar')
 
-    const logo = this.el('div', 'logo')
-    logo.innerHTML = `<span class="logo-hl">hlmv</span><span class="logo-dot">·</span><span class="logo-sub">web</span>`
-    this.header.appendChild(logo)
-
     this.toolbar = this.el('div', 'toolbar')
     this.header.appendChild(this.toolbar)
 
@@ -52,6 +48,12 @@ export class AppShell {
     // ── Sidebar (floating panel) ────────────────────────────────────
     this.sidebar = this.el('div', 'sidebar')
     body.appendChild(this.sidebar)
+
+    // Close button inside sidebar (desktop + mobile)
+    const closeBtn = this.el('button', 'sb-close') as HTMLButtonElement
+    closeBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
+    closeBtn.addEventListener('click', () => this.toggleSidebar())
+    this.sidebar.appendChild(closeBtn)
 
     // Drawer handle (mobile)
     const handle = this.el('div', 'drawer-handle')
