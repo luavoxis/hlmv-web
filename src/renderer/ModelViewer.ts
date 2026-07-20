@@ -94,12 +94,11 @@ export class ModelViewer {
     this.viewMode.orbitPhi    = Math.PI / 2   // eye level
 
     // ── FPS / ViewModel POV ───────────────────────────────────────────────
-    // In GoldSrc, the weapon barrel points along +X (forward in GoldSrc space).
-    // After -90° X rotation, +X stays +X in Three.js.
-    // Camera sits behind-left of the weapon, looking along +X (barrel direction),
-    // so the stock is near the viewer and the barrel extends forward.
-    this.viewMode.fpCamPos.set(c.x - r * 0.8, c.y + r * 0.4, c.z + r * 0.8)
-    this.viewMode.fpLookAt.set(c.x + r * 0.5, c.y - r * 0.1, c.z)
+    // GoldSrc: barrel = +X, up = +Y (after -90° X rotation).
+    // Camera sits behind the stock, looking along +X (barrel direction).
+    // Offset in Z gives the slight right-side angle of a CS 1.6 viewmodel.
+    this.viewMode.fpCamPos.set(c.x - r * 0.4, c.y + r * 0.25, c.z + r * 0.3)
+    this.viewMode.fpLookAt.set(c.x + r * 2.0, c.y - r * 0.05, c.z)
     this.viewMode.fpYaw   = 0
     this.viewMode.fpPitch = 0
 
