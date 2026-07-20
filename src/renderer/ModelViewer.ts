@@ -24,9 +24,10 @@ export class ModelViewer {
   constructor(container: HTMLElement) {
     this.renderer = new WebGLRenderer({ antialias: true, alpha: false })
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    this.renderer.setClearColor(new Color(0x111111))
+    this.renderer.setClearColor(new Color(0x0e0e0e))
     this.renderer.toneMapping = 4          // ACESFilmicToneMapping
     this.renderer.toneMappingExposure = 1.2
+    this.renderer.domElement.style.display = 'none'
     container.appendChild(this.renderer.domElement)
 
     this.scene  = new Scene()
@@ -137,6 +138,10 @@ export class ModelViewer {
   /** Switch view mode — model group stays at origin, only camera changes. */
   setViewMode(mode: import('./ViewMode').ViewModeType): void {
     this.viewMode.setMode(mode)
+  }
+
+  show(): void {
+    this.renderer.domElement.style.display = 'block'
   }
 
   // ── Input ─────────────────────────────────────────────────────────────────

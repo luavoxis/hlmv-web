@@ -84,6 +84,7 @@ function loadModel(mdl: ParsedMDL): void {
   const { group, results, eyePosition } = builder.build(mdl, parser)
   currentGroup = group
   viewer.scene.add(group)
+  viewer.show()
 
   // Fit camera to model bounding box
   viewer.fitCamera(group, eyePosition)
