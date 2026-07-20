@@ -97,7 +97,7 @@ export class ModelViewer {
 
     // Auto-zoom: project all 8 bounding box corners through camera
     // to ensure the model fits in view (FOV=54).
-    this.camera.fov = 40
+    this.camera.fov = 12
     this.camera.near = 0.01
     this.camera.position.copy(fpPos)
     this.camera.lookAt(this.viewMode.fpLookAt)
