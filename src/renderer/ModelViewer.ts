@@ -4,7 +4,7 @@
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Color,
   AmbientLight, DirectionalLight, HemisphereLight,
-  Box3, Sphere, Object3D, Vector3,
+  Box3, Sphere, Object3D, Vector3, AxesHelper,
 } from 'three'
 import { ViewModeController } from './ViewMode'
 
@@ -46,6 +46,9 @@ export class ModelViewer {
     const rim = new DirectionalLight(0x4477cc, 0.6)
     rim.position.set(0, -60, -100)
     this.scene.add(rim)
+
+    const axes = new AxesHelper(50)
+    this.scene.add(axes)
 
     this.viewMode = new ViewModeController()
 
@@ -91,11 +94,12 @@ export class ModelViewer {
     this.viewMode.orbitPhi    = Math.PI / 2   // eye level
 
     // ── FPS / ViewModel POV ───────────────────────────────────────────────
-    // After -90° X rotation, model front faces +Z.
-    // Camera sits to the left, lower, and in front — simulating the classic
-    // CS 1.6 first-person weapon hold where the barrel points forward.
-    this.viewMode.fpCamPos.set(c.x - r * 0.3, c.y + r * 0.2, c.z + r * 0.5)
-    this.viewMode.fpLookAt.copy(c)
+    // In GoldSrc, the weapon barrel points along +X (forward in GoldSrc space).
+    // After -90° X rotation, +X stays +X in Three.js.
+    // Camera sits behind-left of the weapon, looking along +X (barrel direction),
+    // so the stock is near the viewer and the barrel extends forward.
+    this.viewMode.fpCamPos.set(c.x - r * 0.8, c.y + r * 0.4, c.z + r * 0.8)
+    this.viewMode.fpLookAt.set(c.x + r * 0.5, c.y - r * 0.1, c.z)
     this.viewMode.fpYaw   = 0
     this.viewMode.fpPitch = 0
 

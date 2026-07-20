@@ -45,13 +45,7 @@ export class ViewModeController {
 
   private applyFP(cam: PerspectiveCamera): void {
     cam.position.copy(this.fpCamPos)
-    const d = 100
-    this._fpTarget.set(
-      this.fpCamPos.x - Math.sin(this.fpYaw) * Math.cos(this.fpPitch) * d,
-      this.fpCamPos.y + Math.sin(this.fpPitch) * d,
-      this.fpCamPos.z - Math.cos(this.fpYaw) * Math.cos(this.fpPitch) * d,
-    )
-    cam.lookAt(this._fpTarget)
+    cam.lookAt(this.fpLookAt)
     cam.fov = 90
     cam.updateProjectionMatrix()
   }
