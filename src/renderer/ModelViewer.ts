@@ -58,7 +58,7 @@ export class ModelViewer {
   // ── Fit camera parameters to a loaded model ───────────────────────────────
   // The model group NEVER moves — camera is always adjusted around it.
 
-  fitCamera(object: Object3D): void {
+  fitCamera(object: Object3D, eyePosition?: Vector3): void {
     // Make sure matrix is up to date before measuring
     object.updateMatrixWorld(true)
 
@@ -75,32 +75,60 @@ export class ModelViewer {
 
     const sphere = new Sphere()
     box.getBoundingSphere(sphere)
-    const c = sphere.center   // world-space centre after rotation
+    const c = sphere.center
     const r = sphere.radius
 
-    console.log(`[fitCamera] bbox centre=(${c.x.toFixed(1)}, ${c.y.toFixed(1)}, ${c.z.toFixed(1)}) r=${r.toFixed(1)}`)
-    console.log(`[fitCamera] bbox min=(${box.min.x.toFixed(1)}, ${box.min.y.toFixed(1)}, ${box.min.z.toFixed(1)}) max=(${box.max.x.toFixed(1)}, ${box.max.y.toFixed(1)}, ${box.max.z.toFixed(1)})`)
-    console.log(`[fitCamera] fpCamPos=(${this.viewMode.fpCamPos.x.toFixed(1)}, ${this.viewMode.fpCamPos.y.toFixed(1)}, ${this.viewMode.fpCamPos.z.toFixed(1)}) fpLookAt=(${this.viewMode.fpLookAt.x.toFixed(1)}, ${this.viewMode.fpLookAt.y.toFixed(1)}, ${this.viewMode.fpLookAt.z.toFixed(1)})`)
-
     // ── Orbit ─────────────────────────────────────────────────────────────
-    // Camera orbits around the bounding sphere centre.
-    // phi=PI/2 → equator level (straight ahead, no tilt)
-    // theta=PI → look at model from the front (+Z face, because GoldSrc
-    //            models face -Y which becomes +Z after -90° X rotation)
     this.viewMode.orbitTarget.copy(c)
     this.viewMode.orbitRadius = Math.max(r * 2.5, 10)
-    this.viewMode.orbitTheta  = Math.PI   // front view
-    this.viewMode.orbitPhi    = Math.PI / 2   // eye level
+    this.viewMode.orbitTheta  = Math.PI
+    this.viewMode.orbitPhi    = Math.PI / 2
 
-    // ── FPS / ViewModel POV ───────────────────────────────────────────────
-    // Barrel = +X. Camera sits behind (-X), above (+Y), and right (+Z) of
-    // the weapon, looking straight along +X. This places the weapon in the
-    // lower-left of the viewport with the barrel extending upper-right —
-    // matching the classic CS 1.6 first-person viewmodel.
-    this.viewMode.fpCamPos.set(c.x - r * 0.6, c.y + r * 0.45, c.z + r * 0.35)
-    this.viewMode.fpLookAt.set(c.x + r * 10, c.y + r * 0.1, c.z)
+    // ── FPS / Weapon-Origin POV ──────────────────────────────────────────
+    // Camera position = MDL eyePosition (already rotated by container).
+    // Forward = (1,0,0) rotated by container (-90° X, -90° Z) = (0,0,1) = +Z.
+    // Up = (0,0,1) rotated = (0,1,0) = +Y.
+    const fpPos = eyePosition ?? new Vector3(c.x, c.y + r * 0.4, c.z + r * 0.8)
+    const fpFwd = new Vector3(0, 0, 1)  // forward after (-90,0,-90) rotation
+    this.viewMode.fpCamPos.copy(fpPos)
+    this.viewMode.fpLookAt.copy(fpPos).addScaledVector(fpFwd, 100)
     this.viewMode.fpYaw   = 0
     this.viewMode.fpPitch = 0
+
+    // Auto-zoom: project all 8 bounding box corners through camera
+    // to ensure the model fits in view (FOV=54).
+    this.camera.fov = 54
+    this.camera.near = 0.01
+    this.camera.position.copy(fpPos)
+    this.camera.lookAt(this.viewMode.fpLookAt)
+    this.camera.up.set(0, 1, 0)
+    this.camera.zoom = 1
+    this.camera.updateProjectionMatrix()
+
+    let maxExtent = 0
+    const corners = [
+      new Vector3(box.min.x, box.min.y, box.min.z),
+      new Vector3(box.min.x, box.min.y, box.max.z),
+      new Vector3(box.min.x, box.max.y, box.min.z),
+      new Vector3(box.min.x, box.max.y, box.max.z),
+      new Vector3(box.max.x, box.min.y, box.min.z),
+      new Vector3(box.max.x, box.min.y, box.max.z),
+      new Vector3(box.max.x, box.max.y, box.min.z),
+      new Vector3(box.max.x, box.max.y, box.max.z),
+    ]
+    this.camera.updateMatrixWorld(true)
+    const inv = this.camera.matrixWorldInverse
+    for (const corner of corners) {
+      const projected = corner.clone().applyMatrix4(inv)
+      if (projected.z >= -this.camera.near) continue
+      projected.project(this.camera)
+      if (!Number.isFinite(projected.x) || !Number.isFinite(projected.y)) continue
+      maxExtent = Math.max(maxExtent, Math.abs(projected.x), Math.abs(projected.y))
+    }
+    if (maxExtent > 0) {
+      this.camera.zoom = Math.min(Math.max(0.56 / maxExtent, 0.18), 1)
+      this.camera.updateProjectionMatrix()
+    }
 
     // ── FreeLook ──────────────────────────────────────────────────────────
     this.viewMode.flPos.set(c.x, c.y + r * 0.3, c.z + r * 2.5)

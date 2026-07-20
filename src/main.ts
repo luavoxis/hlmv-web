@@ -2,7 +2,7 @@
  * main.ts — application entry point.
  * Wires all subsystems together and owns the game loop.
  */
-import { Group } from 'three'
+import { Group, Vector3 } from 'three'
 import { MDLParser }           from './io/MDLParser'
 import { ModelBuilder }        from './renderer/ModelBuilder'
 import { ModelViewer }         from './renderer/ModelViewer'
@@ -81,12 +81,12 @@ function loadModel(mdl: ParsedMDL): void {
   }
   if (emptyState) { emptyState.remove(); emptyState = null }
 
-  const { group, results } = builder.build(mdl, parser)
+  const { group, results, eyePosition } = builder.build(mdl, parser)
   currentGroup = group
   viewer.scene.add(group)
 
   // Fit camera to model bounding box
-  viewer.fitCamera(group)
+  viewer.fitCamera(group, eyePosition)
 
   // Setup animation
   animCtrl.setModel(results, mdl.sequences)

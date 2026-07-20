@@ -10,7 +10,7 @@
 import {
   BufferGeometry, Float32BufferAttribute, Mesh,
   MeshPhongMaterial, MeshBasicMaterial, AdditiveBlending,
-  Group, DoubleSide, Material,
+  Group, DoubleSide, Material, Vector3, Euler,
 } from 'three'
 import { ParsedMDL, StudioBone, StudioBoneController, StudioSeqDesc, StudioAnim, STUDIO_NF_ADDITIVE, STUDIO_NF_FULLBRIGHT } from '../types/mdl'
 import { MDLParser } from '../io/MDLParser'
@@ -180,7 +180,7 @@ export class ModelBuilder {
 
   // ── Public entry point ────────────────────────────────────────────────────
 
-  build(mdl: ParsedMDL, parser: MDLParser): { group: Group; results: MeshBuildResult[] } {
+  build(mdl: ParsedMDL, parser: MDLParser): { group: Group; results: MeshBuildResult[]; eyePosition: Vector3 } {
     const group   = new Group()
     const results: MeshBuildResult[] = []
 
@@ -203,11 +203,17 @@ export class ModelBuilder {
       if (r) { results.push(r); group.add(r.mesh) }
     }
 
-    // GoldSrc uses Z-up right-handed; Three.js uses Y-up right-handed.
-    // A single -90° rotation around the X axis maps  Z→Y, Y→-Z.
-    group.rotation.x = -Math.PI / 2
+    // GoldSrc: X=forward, Y=left, Z=up
+    // Three.js: X=right, Y=up, Z=toward viewer
+    // Rotation: -90° X (Z→Y, Y→-Z) then -90° Z (maps correctly)
+    group.rotation.set(-Math.PI / 2, 0, -Math.PI / 2, 'XYZ')
 
-    return { group, results }
+    // Rotate eyePosition by the same container rotation
+    const ep = mdl.header.eyePosition
+    const eyePosition = new Vector3(ep[0], ep[1], ep[2])
+      .applyEuler(new Euler(-Math.PI / 2, 0, -Math.PI / 2, 'XYZ'))
+
+    return { group, results, eyePosition }
   }
 
   // ── Build one mstudiomodel_t ───────────────────────────────────────────────
