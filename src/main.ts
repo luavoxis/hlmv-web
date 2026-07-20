@@ -103,6 +103,7 @@ function loadModel(mdl: ParsedMDL): void {
   // Register callbacks BEFORE playing
   animCtrl.setOnSeqChange(seq => {
     infoPanel.showSeq(seq)
+    animBar.showSeq(seq)
     if (seq) animBar.selectSeq(animCtrl.getCurrentSeqIndex())
   })
 

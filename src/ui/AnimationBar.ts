@@ -86,17 +86,17 @@ export class AnimationBar {
       this.guard = false
     })
 
-    anim.setOnSeqChange(seq => {
-      this.syncBtn()
-      if (!seq) return
-      this.guard = true
-      this.frameLabel.textContent = `1 / ${seq.numFrames}`
-      this.frameSlider.max   = String(Math.max(0, seq.numFrames - 1))
-      this.frameSlider.value = '0'
-      this.guard = false
-    })
-
     this.syncBtn()
+  }
+
+  showSeq(seq: StudioSeqDesc | null): void {
+    this.syncBtn()
+    if (!seq) return
+    this.guard = true
+    this.frameLabel.textContent = `1 / ${seq.numFrames}`
+    this.frameSlider.max   = String(Math.max(0, seq.numFrames - 1))
+    this.frameSlider.value = '0'
+    this.guard = false
   }
 
   populate(seqs: StudioSeqDesc[]): void {
