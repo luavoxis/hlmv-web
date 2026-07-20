@@ -67,7 +67,7 @@ export class ModelViewer {
     if (box.isEmpty()) {
       this.viewMode.orbitTarget.set(0, 0, 0)
       this.viewMode.orbitRadius = 100
-      this.viewMode.fpCamPos.set(0, 0, 100)
+      this.viewMode.fpCamPos.set(0, 28, 100)
       this.viewMode.fpLookAt.set(0, 0, 0)
       this.viewMode.flPos.set(0, 30, 100)
       return
@@ -91,11 +91,11 @@ export class ModelViewer {
     this.viewMode.orbitPhi    = Math.PI / 2   // eye level
 
     // ── FPS / ViewModel POV ───────────────────────────────────────────────
-    // Camera sits in front of the model along +Z, looking toward -Z at model.
-    // GoldSrc view models are rendered with the player looking along +X in
-    // GoldSrc space, which maps to -Z after our rotation.
-    // So camera goes to c + (0, slight_up, +radius) and looks at c.
-    this.viewMode.fpCamPos.set(c.x, c.y + r * 0.05, c.z + r * 1.6)
+    // GoldSrc standard: eye height = 28 units (standing player).
+    // After -90° X rotation, model front faces +Z.
+    // Camera sits at +Z looking back at -Z (sees the model's front face).
+    const eyeH = 28
+    this.viewMode.fpCamPos.set(c.x, c.y + eyeH, c.z + r * 1.6)
     this.viewMode.fpLookAt.copy(c)
     this.viewMode.fpYaw   = 0
     this.viewMode.fpPitch = 0
