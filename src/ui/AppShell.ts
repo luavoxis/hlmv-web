@@ -16,8 +16,10 @@ export class AppShell {
 
   private toolbar:      HTMLElement
   private toolbarRight: HTMLElement
-  private drawerOpen  = true
+  private drawerOpen  = false
   private isMobile    = false
+  private toggleBtn:  HTMLElement | null = null
+  private fabBtn:     HTMLElement | null = null
 
   constructor(root: HTMLElement) {
     this.isMobile = window.innerWidth < 768
@@ -49,7 +51,6 @@ export class AppShell {
 
     // ── Sidebar (floating panel) ────────────────────────────────────
     this.sidebar = this.el('div', 'sidebar')
-    this.sidebar.classList.add('open')
     body.appendChild(this.sidebar)
 
     // Drawer handle (mobile)
@@ -61,13 +62,17 @@ export class AppShell {
     const toggle = this.el('button', 'sidebar-toggle') as HTMLButtonElement
     toggle.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`
     toggle.addEventListener('click', () => this.toggleSidebar())
+    toggle.style.display = 'none'
     body.appendChild(toggle)
+    this.toggleBtn = toggle
 
     // ── Mobile FAB ──────────────────────────────────────────────────
     const fab = this.el('button', 'fab') as HTMLButtonElement
     fab.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`
     fab.addEventListener('click', () => this.toggleSidebar())
+    fab.style.display = 'none'
     this.viewport.appendChild(fab)
+    this.fabBtn = fab
 
     window.addEventListener('resize', () => {
       const m = window.innerWidth < 768
@@ -116,6 +121,11 @@ export class AppShell {
     return el
   }
 
+  openSidebar(): void {
+    this.drawerOpen = true
+    this.syncSidebar()
+  }
+
   private toggleSidebar(): void {
     this.drawerOpen = !this.drawerOpen
     this.syncSidebar()
@@ -123,6 +133,14 @@ export class AppShell {
 
   private syncSidebar(): void {
     this.sidebar.classList.toggle('open', this.drawerOpen)
+    // Toggle button: visible only when sidebar is closed
+    if (this.toggleBtn) {
+      this.toggleBtn.style.display = this.drawerOpen ? 'none' : ''
+    }
+    // Mobile fab: visible only when sidebar is closed
+    if (this.fabBtn && this.isMobile) {
+      this.fabBtn.style.display = this.drawerOpen ? 'none' : ''
+    }
   }
 
   private el(tag: string, cls?: string): HTMLElement {

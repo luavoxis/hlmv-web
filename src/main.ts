@@ -118,6 +118,7 @@ function loadModel(mdl: ParsedMDL): void {
   // Show sidebar sections
   infoWrapper.style.display = ''
   animWrapper.style.display = ''
+  shell.openSidebar()
 }
 
 // ── Main loop ─────────────────────────────────────────────────────────────
