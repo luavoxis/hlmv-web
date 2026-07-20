@@ -2,12 +2,15 @@ import { StudioSeqDesc } from '../types/mdl'
 import { AnimationController } from '../animation/AnimationController'
 
 export class AnimationBar {
-  private sel:        HTMLSelectElement
-  private playBtn:    HTMLButtonElement
+  private sel:         HTMLSelectElement
+  private playBtn:     HTMLButtonElement
+  private restartBtn:  HTMLButtonElement
   private frameSlider: HTMLInputElement
   private frameLabel:  HTMLSpanElement
+  private timeLabel:   HTMLSpanElement
   private speedSlider: HTMLInputElement
   private speedLabel:  HTMLSpanElement
+  private speedPresets: HTMLButtonElement[] = []
   private guard = false
 
   constructor(container: HTMLElement, private anim: AnimationController) {
@@ -27,13 +30,25 @@ export class AnimationBar {
 
     this.playBtn = document.createElement('button')
     this.playBtn.className = 'anim-play'
+    this.playBtn.title = 'Play / Pause'
     this.playBtn.addEventListener('click', () => { this.anim.toggle(); this.syncBtn() })
     row1.appendChild(this.playBtn)
 
+    this.restartBtn = document.createElement('button')
+    this.restartBtn.className = 'anim-restart'
+    this.restartBtn.title = 'Restart sequence'
+    this.restartBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>`
+    this.restartBtn.addEventListener('click', () => { this.anim.playSequence(this.anim.getCurrentSeqIndex()) })
+    row1.appendChild(this.restartBtn)
+
     this.frameLabel = document.createElement('span')
     this.frameLabel.className = 'anim-framelabel'
-    this.frameLabel.textContent = '0 / 0'
     row1.appendChild(this.frameLabel)
+
+    this.timeLabel = document.createElement('span')
+    this.timeLabel.className = 'anim-time'
+    row1.appendChild(this.timeLabel)
+
     container.appendChild(row1)
 
     // ── Frame scrub slider ───────────────────────────────────────────────
@@ -44,7 +59,10 @@ export class AnimationBar {
     this.frameSlider.value = '0'
     this.frameSlider.className = 'anim-slider'
     this.frameSlider.addEventListener('input', () => {
-      if (!this.guard) this.anim.setFrame(parseInt(this.frameSlider.value))
+      if (!this.guard) {
+        this.anim.setFrame(parseInt(this.frameSlider.value))
+        this.updateSliderFill(this.frameSlider)
+      }
     })
     container.appendChild(this.frameSlider)
 
@@ -57,6 +75,23 @@ export class AnimationBar {
     speedLbl.textContent = 'Speed'
     row2.appendChild(speedLbl)
 
+    const presetValues = [0.5, 1, 2]
+    for (const v of presetValues) {
+      const btn = document.createElement('button')
+      btn.className = 'anim-speed-preset'
+      btn.textContent = v + 'x'
+      if (v === 1) btn.classList.add('active')
+      btn.addEventListener('click', () => {
+        this.anim.setSpeed(v)
+        this.speedSlider.value = String(v)
+        this.speedLabel.textContent = v.toFixed(1) + 'x'
+        this.updateSliderFill(this.speedSlider)
+        this.syncSpeedPresets(v)
+      })
+      this.speedPresets.push(btn)
+      row2.appendChild(btn)
+    }
+
     this.speedSlider = document.createElement('input')
     this.speedSlider.type  = 'range'
     this.speedSlider.min   = '0.1'
@@ -67,35 +102,67 @@ export class AnimationBar {
     this.speedSlider.addEventListener('input', () => {
       const v = parseFloat(this.speedSlider.value)
       this.anim.setSpeed(v)
-      this.speedLabel.textContent = v.toFixed(2) + 'x'
+      this.speedLabel.textContent = v.toFixed(1) + 'x'
+      this.updateSliderFill(this.speedSlider)
+      this.syncSpeedPresets(v)
     })
     row2.appendChild(this.speedSlider)
 
     this.speedLabel = document.createElement('span')
     this.speedLabel.className = 'anim-speedlabel'
-    this.speedLabel.textContent = '1.00x'
+    this.speedLabel.textContent = '1.0x'
     row2.appendChild(this.speedLabel)
     container.appendChild(row2)
 
     // ── Callbacks from controller ────────────────────────────────────────
     anim.setOnFrameChange((frame, total) => {
       this.guard = true
+      const seq = anim.getCurrentSequence()
+      const fps = seq && seq.fps > 0 ? seq.fps : 30
       this.frameLabel.textContent = `${frame + 1} / ${total}`
       this.frameSlider.max   = String(Math.max(0, total - 1))
       this.frameSlider.value = String(frame)
+      this.updateSliderFill(this.frameSlider)
+
+      const cur = frame / fps
+      const tot = total / fps
+      this.timeLabel.textContent = `${this.fmtTime(cur)} / ${this.fmtTime(tot)}`
       this.guard = false
     })
 
     this.syncBtn()
   }
 
+  private fmtTime(sec: number): string {
+    const m = Math.floor(sec / 60)
+    const s = Math.floor(sec % 60)
+    return `${m}:${s.toString().padStart(2, '0')}`
+  }
+
+  private updateSliderFill(el: HTMLInputElement): void {
+    const min = parseFloat(el.min)
+    const max = parseFloat(el.max)
+    const val = parseFloat(el.value)
+    const pct = max > min ? ((val - min) / (max - min)) * 100 : 0
+    el.style.setProperty('--pct', String(pct))
+  }
+
+  private syncSpeedPresets(v: number): void {
+    this.speedPresets.forEach(btn => {
+      btn.classList.toggle('active', Math.abs(parseFloat(btn.textContent || '0') - v) < 0.01)
+    })
+  }
+
   showSeq(seq: StudioSeqDesc | null): void {
     this.syncBtn()
     if (!seq) return
     this.guard = true
+    const fps = seq.fps > 0 ? seq.fps : 30
     this.frameLabel.textContent = `1 / ${seq.numFrames}`
     this.frameSlider.max   = String(Math.max(0, seq.numFrames - 1))
     this.frameSlider.value = '0'
+    this.updateSliderFill(this.frameSlider)
+    this.timeLabel.textContent = `0:00 / ${this.fmtTime(seq.numFrames / fps)}`
     this.guard = false
   }
 

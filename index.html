@@ -125,34 +125,49 @@
     .sidebar-toggle svg { width: 16px; height: 16px; }
     .sidebar.open ~ .sidebar-toggle { opacity: 0; pointer-events: none; }
 
-    /* ─── Sidebar close button ─────────────────────────────────────── */
+    /* ─── Sidebar header ──────────────────────────────────────────── */
+    .sidebar-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 12px 10px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .sidebar-header-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--text2);
+    }
+
     .sb-close {
-      position: absolute; top: 8px; right: 8px; z-index: 2;
       width: 28px; height: 28px; border: none; border-radius: 6px;
       background: transparent; color: var(--text3); cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       transition: background .15s, color .15s;
+      flex-shrink: 0;
     }
-    .sb-close:hover { background: rgba(255,255,255,.08); color: var(--text); }
+    .sb-close:hover { background: var(--surface2); color: var(--text); }
     .sb-close svg { width: 16px; height: 16px; }
 
     .drawer-handle { display: none; }
 
     /* ─── Sidebar sections ──────────────────────────────────────────── */
-    .sb-section { border-bottom: 1px solid var(--border); }
+    .sb-section {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sb-section:last-child { border-bottom: none; }
 
     .sb-title {
-      padding: 10px 16px 8px;
       font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
-      text-transform: uppercase; color: var(--text2);
+      text-transform: uppercase; color: var(--text3);
       display: flex; align-items: center; gap: 8px;
+      margin-bottom: 10px;
     }
     .sb-title::before {
       content: ''; display: inline-block;
       width: 10px; height: 2px; background: var(--accent); border-radius: 1px;
     }
 
-    .sb-content { padding: 6px 16px 16px; }
+    .sb-content { }
 
     /* ─── Empty state ───────────────────────────────────────────────── */
     .empty {
@@ -199,79 +214,130 @@
     /* ─── Info panel ────────────────────────────────────────────────── */
     .info-name {
       font-size: 13px; font-weight: 600; color: var(--text);
-      padding-bottom: 8px; margin-bottom: 8px;
+      padding-bottom: 10px; margin-bottom: 10px;
       border-bottom: 1px solid var(--border);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .info-grid {
-      display: grid; grid-template-columns: 1fr auto; gap: 2px 10px;
+      display: grid; grid-template-columns: 1fr auto; gap: 3px 12px;
     }
-    .info-label { color: var(--text2); font-size: 11px; line-height: 1.8; }
-    .info-val   { color: var(--text);  font-size: 11px; font-weight: 500;
-                  font-variant-numeric: tabular-nums; text-align: right; line-height: 1.8; }
+    .info-label {
+      color: var(--text3); font-size: 11px; line-height: 2;
+    }
+    .info-val {
+      color: var(--text);  font-size: 11px; font-weight: 500;
+      font-variant-numeric: tabular-nums; text-align: right; line-height: 2;
+    }
     .info-seq {
-      margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+      margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
     }
     .info-seq-name {
       font-size: 12px; font-weight: 600; color: var(--accent);
-      margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
     /* ─── Animation bar ─────────────────────────────────────────────── */
     .anim-select {
-      width: 100%; margin-bottom: 8px;
+      width: 100%; margin-bottom: 12px;
       appearance: none; -webkit-appearance: none;
-      background: rgba(255,255,255,.04)
+      background: var(--surface2)
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23909090' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")
         no-repeat right 8px center;
       background-size: 10px;
       color: var(--text); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 7px 28px 7px 10px;
-      font: 12px/1 var(--font); cursor: pointer;
+      border-radius: var(--r); padding: 8px 28px 8px 12px;
+      font: 500 12px/1 var(--font); cursor: pointer;
+      transition: border-color .15s;
     }
     .anim-select:hover  { border-color: var(--border2); }
     .anim-select:focus  { border-color: var(--accent); outline: none; }
 
     .anim-row {
-      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
     }
+    .anim-row:last-child { margin-bottom: 0; }
 
     .anim-play {
-      width: 32px; height: 32px; flex-shrink: 0; border: none; border-radius: 50%;
+      width: 36px; height: 36px; flex-shrink: 0; border: none; border-radius: 50%;
       background: var(--accent); color: #fff; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: background .15s, transform .1s;
-      box-shadow: 0 2px 8px rgba(59,130,246,.3);
+      transition: background .15s, transform .1s, box-shadow .15s;
+      box-shadow: 0 2px 10px rgba(59,130,246,.35);
     }
-    .anim-play svg { width: 13px; height: 13px; }
-    .anim-play:hover  { background: var(--accent2); }
-    .anim-play:active { transform: scale(.93); }
+    .anim-play svg { width: 14px; height: 14px; }
+    .anim-play:hover  { background: var(--accent2); box-shadow: 0 3px 14px rgba(59,130,246,.5); }
+    .anim-play:active { transform: scale(.92); }
+
+    .anim-restart {
+      width: 28px; height: 28px; flex-shrink: 0; border: none; border-radius: 6px;
+      background: transparent; color: var(--text3); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s;
+    }
+    .anim-restart svg { width: 14px; height: 14px; }
+    .anim-restart:hover { background: var(--surface2); color: var(--text); }
 
     .anim-framelabel {
-      flex: 1; font-size: 11px; font-weight: 500;
+      font-size: 11px; font-weight: 500;
       font-variant-numeric: tabular-nums; color: var(--text2);
+      margin-left: auto;
     }
-    .anim-label     { font-size: 11px; color: var(--text2); flex-shrink: 0; min-width: 36px; }
-    .anim-speedlabel { font-size: 11px; color: var(--text2); min-width: 36px; text-align: right;
-                       font-variant-numeric: tabular-nums; }
+    .anim-time {
+      font-size: 10px; font-weight: 500; color: var(--text3);
+      font-variant-numeric: tabular-nums; min-width: 64px; text-align: right;
+    }
+
+    .anim-label { font-size: 11px; color: var(--text2); flex-shrink: 0; min-width: 36px; }
+    .anim-speedlabel {
+      font-size: 11px; color: var(--text2); min-width: 36px; text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .anim-speed-preset {
+      padding: 4px 8px; border: 1px solid var(--border); border-radius: 5px;
+      background: transparent; color: var(--text3); cursor: pointer;
+      font: 600 10px/1 var(--font); transition: all .12s;
+    }
+    .anim-speed-preset:hover { border-color: var(--border2); color: var(--text); }
+    .anim-speed-preset.active {
+      background: var(--accent-bg); border-color: var(--accent); color: var(--accent);
+    }
 
     .anim-slider {
       flex: 1; height: 4px; cursor: pointer;
       appearance: none; -webkit-appearance: none;
-      background: rgba(255,255,255,.08); border-radius: 2px; outline: none;
+      background: rgba(255,255,255,.06); border-radius: 3px; outline: none;
       margin-bottom: 0;
+      --pct: 0;
     }
-    .anim-slider:hover { background: rgba(255,255,255,.14); }
+    .anim-slider:hover { background: rgba(255,255,255,.1); }
+    .anim-slider::-webkit-slider-runnable-track {
+      height: 4px; border-radius: 3px;
+      background: linear-gradient(to right, var(--accent) 0%, var(--accent) calc(var(--pct) * 1%), rgba(255,255,255,.06) calc(var(--pct) * 1%));
+    }
     .anim-slider::-webkit-slider-thumb {
       appearance: none; -webkit-appearance: none;
-      width: 14px; height: 14px; border-radius: 50%;
+      width: 16px; height: 16px; border-radius: 50%;
       background: var(--accent); border: 2px solid var(--surface-solid);
-      cursor: pointer; transition: transform .1s;
+      cursor: pointer; transition: transform .12s, box-shadow .12s;
+      margin-top: -6px;
+      box-shadow: 0 0 0 3px transparent;
     }
-    .anim-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    .anim-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 0 4px var(--accent-bg);
+    }
+    .anim-slider::-moz-range-track {
+      height: 4px; border-radius: 3px;
+      background: rgba(255,255,255,.06);
+    }
     .anim-slider::-moz-range-thumb {
-      width: 14px; height: 14px; border-radius: 50%;
+      width: 16px; height: 16px; border-radius: 50%;
       background: var(--accent); border: 2px solid var(--surface-solid); cursor: pointer;
+    }
+    .anim-slider::-moz-range-progress {
+      height: 4px; border-radius: 3px;
+      background: var(--accent);
     }
 
     /* ─── FAB (mobile sidebar toggle) ──────────────────────────────── */
@@ -299,11 +365,19 @@
         border-left: none; border: none;
         border-radius: 16px 16px 0 0;
         z-index: 30;
-        transition: transform .28s cubic-bezier(.4,0,.2,1);
+        transition: transform .32s cubic-bezier(.22,1,.36,1);
       }
-      .sidebar:not(.open) { transform: translateY(calc(100% - 36px)); }
+      .sidebar:not(.open) {
+        transform: translateY(calc(100% - 40px));
+      }
 
       .sidebar-toggle { display: none; }
+
+      .sidebar-header {
+        padding: 6px 12px 6px 16px;
+        border-bottom: none;
+      }
+      .sidebar-header-title { display: none; }
 
       .drawer-handle {
         display: flex; align-items: center; justify-content: center;
@@ -313,6 +387,8 @@
         content: ''; width: 32px; height: 3px;
         background: rgba(255,255,255,.15); border-radius: 2px;
       }
+
+      .sb-section { padding: 12px 16px; }
 
       .fab { display: flex; }
     }

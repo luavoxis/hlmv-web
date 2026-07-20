@@ -49,11 +49,16 @@ export class AppShell {
     this.sidebar = this.el('div', 'sidebar')
     body.appendChild(this.sidebar)
 
-    // Close button inside sidebar (desktop + mobile)
+    // Sidebar header with title + close button
+    const sidebarHeader = this.el('div', 'sidebar-header')
+    const sidebarTitle = this.el('span', 'sidebar-header-title')
+    sidebarTitle.textContent = 'Properties'
+    sidebarHeader.appendChild(sidebarTitle)
     const closeBtn = this.el('button', 'sb-close') as HTMLButtonElement
     closeBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
     closeBtn.addEventListener('click', () => this.toggleSidebar())
-    this.sidebar.appendChild(closeBtn)
+    sidebarHeader.appendChild(closeBtn)
+    this.sidebar.appendChild(sidebarHeader)
 
     // Drawer handle (mobile)
     const handle = this.el('div', 'drawer-handle')
