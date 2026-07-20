@@ -107,15 +107,13 @@ function loadModel(mdl: ParsedMDL): void {
     if (seq) animBar.selectSeq(animCtrl.getCurrentSeqIndex())
   })
 
+  // Model info FIRST (innerHTML wipes seq info)
+  infoPanel.showModel(mdl)
+
   if (mdl.sequences.length > 0) {
     animCtrl.playSequence(0)
     animBar.selectSeq(0)
-    infoPanel.showSeq(mdl.sequences[0])
-  } else {
-    infoPanel.showSeq(null)
   }
-
-  infoPanel.showModel(mdl)
 
   // Show sidebar sections
   infoWrapper.style.display = ''
